@@ -1,0 +1,21 @@
+[versions]
+io-grpc = "1.80.0"
+protobuf-protoc = "4.34.1"
+google-protobuf = "0.10.0"
+spring-framework = "4.0.6"
+spring-framework-grpc = "1.0.3"
+spring-dependency-management = "1.1.7"
+
+[libraries]
+grpc-all = { group = "io.grpc", name = "grpc-all", version.ref = "io-grpc" }
+protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf-protoc" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf-protoc" }
+protoc-grpc-java = { group = "io.grpc", name = "protoc-gen-grpc-java", version.ref = "io-grpc" }
+spring-boot-starter = { group = "org.springframework.boot", name = "spring-boot-starter", version.ref = "spring-framework" }
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web", version.ref = "spring-framework" }
+spring-framework-grpc = { group = "org.springframework.grpc", name = "spring-grpc-spring-boot-starter", version.ref = "spring-framework-grpc" }
+
+[plugins]
+google-protobuf = { id = "com.google.protobuf", version.ref = "google-protobuf" }
+spring-framework = { id = "org.springframework.boot", version.ref = "spring-framework" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }

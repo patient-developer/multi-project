@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: consumer
+  grpc:
+    client:
+      channels:
+        foo:
+          address: ${GRPC_ADDRESS:FOO}
