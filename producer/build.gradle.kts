@@ -1,7 +1,7 @@
 import com.google.protobuf.gradle.id
 
 plugins {
-    java
+    `java-library`
     alias(libs.plugins.google.protobuf)
 }
 
@@ -9,6 +9,30 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+}
+
+sourceSets.main {
+    java {
+        srcDir("build/generated/sources/proto/main/grpc")
+        srcDir("build/generated/sources/proto/main/java")
+    }
+}
+
+val grpcCompiledJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("grpcCompiled")
+    from(sourceSets.main.get().output)
+}
+
+configurations {
+    consumable("grpcCompiledJars") {
+        attributes {
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named("grpc-compiled-jar"))
+        }
+    }
+}
+
+artifacts {
+    add("grpcCompiledJars", grpcCompiledJar)
 }
 
 repositories {
