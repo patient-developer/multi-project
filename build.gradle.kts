@@ -3,6 +3,8 @@ import com.google.protobuf.gradle.id
 plugins {
     java
     alias(libs.plugins.google.protobuf)
+    alias(libs.plugins.spring.framework)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 java {
@@ -18,6 +20,9 @@ repositories {
 dependencies {
     implementation(libs.grpc.all)
     implementation(libs.protobuf.java)
+    implementation(libs.spring.boot.starter)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.framework.grpc)
 }
 
 protobuf {

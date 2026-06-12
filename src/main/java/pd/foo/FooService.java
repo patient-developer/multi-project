@@ -1,4 +1,4 @@
-package consumer.foo;
+package pd.foo;
 
 import foo.Foo;
 import foo.FooServiceGrpc;

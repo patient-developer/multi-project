@@ -1,4 +1,4 @@
-package consumer.grpc;
+package pd.grpc;
 
 import foo.FooServiceGrpc;
 import org.springframework.context.annotation.Bean;
