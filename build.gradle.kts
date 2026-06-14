@@ -25,6 +25,53 @@ dependencies {
     implementation(libs.spring.framework.grpc)
 }
 
+tasks.register<Exec>("fetchProtoFiles") {
+    description = "Fetching proto files from 'foo-server' to generate gRPC client."
+    if (file("build/cloned/").exists()) {
+        commandLine("echo", "Proto files from 'foo-server' already imported.")
+    } else {
+        workingDir(".")
+        commandLine(
+            "git",
+            "clone",
+            "--depth=1",
+            "--branch=main",
+            "--single-branch",
+            "https://github.com/patient-developer/foo-server.git",
+            "build/cloned/"
+        )
+        doLast {
+            copy {
+                from("build/cloned/src/main/proto/")
+                into("build/proto/")
+            }
+            delete("build/cloned/")
+        }
+    }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
+}
+
+sourceSets.main {
+    proto {
+        srcDir("build/proto")
+    }
+}
+
+tasks {
+    generateProto {
+        dependsOn("fetchProtoFiles")
+    }
+}
+
 protobuf {
     protoc {
         artifact = libs.protobuf.protoc.get().toString()
