@@ -27,7 +27,11 @@ dependencies {
 
 tasks.register<Exec>("fetchProtoFiles") {
     description = "Fetching proto files from 'foo-server' to generate gRPC client."
-    onlyIf { !file("build/cloned").exists() }
+    // onlyIf { !file("build/cloned").exists() }
+    // defining inputs and outputs according to
+    // https://docs.gradle.org/current/userguide/incremental_build.html#sec:runtime_api_for_adhoc
+    inputs.dir(file("build/cloned"))
+    outputs.dir(file("build/proto"))
     workingDir(".")
     commandLine(
         "git",
