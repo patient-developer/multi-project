@@ -27,10 +27,9 @@ dependencies {
 
 tasks.register<Exec>("fetchProtoFiles") {
     description = "Fetching proto files from 'foo-server' to generate gRPC client."
-    val clonedFolder = "build/cloned"; // (1)
+    val clonedFolder = layout.buildDirectory.dir("cloned"); // (1)
     onlyIf { !file(clonedFolder).exists() } // apply (1)
-    outputs.dir("build/proto") // (2)
-    workingDir(".")
+    outputs.dir(layout.buildDirectory.files("proto")) // (2)
     commandLine(
         "git",
         "clone",
@@ -50,13 +49,14 @@ tasks.register<Exec>("fetchProtoFiles") {
 
 sourceSets.main {
     proto {
-        srcDir("build/proto")
+        srcDir(layout.buildDirectory.dir("proto"))
     }
 }
 
 tasks {
     generateProto {
-        inputs(from("fetchProtoFiles").outputs)
+        addSourceDirs(files("fetchProtoFiles"))
+//        dependsOn("fetchProtoFiles")
     }
 }
 
