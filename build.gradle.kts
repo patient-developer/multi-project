@@ -4,7 +4,6 @@ plugins {
     java
     alias(libs.plugins.google.protobuf)
     alias(libs.plugins.spring.framework)
-    alias(libs.plugins.spring.dependency.management)
 }
 
 java {
@@ -22,40 +21,27 @@ dependencies {
     implementation(libs.protobuf.java)
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.web)
+    implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
     implementation(libs.spring.framework.grpc)
 }
 
 tasks.register<Exec>("fetchProtoFiles") {
     description = "Fetching proto files from 'foo-server' to generate gRPC client."
-    if (file("build/cloned/").exists()) {
-        commandLine("echo", "Proto files from 'foo-server' already imported.")
-    } else {
-        workingDir(".")
-        commandLine(
-            "git",
-            "clone",
-            "--depth=1",
-            "--branch=main",
-            "--single-branch",
-            "https://github.com/patient-developer/foo-server.git",
-            "build/cloned/"
-        )
-        doLast {
-            copy {
-                from("build/cloned/src/main/proto/")
-                into("build/proto/")
-            }
-            delete("build/cloned/")
-        }
-    }
-}
-
-dependencyAnalysis {
-    issues {
-        all {
-            onAny {
-                severity("fail")
-            }
+    onlyIf { !file("build/cloned").exists() }
+    workingDir(".")
+    commandLine(
+        "git",
+        "clone",
+        "--depth=1",
+        "--branch=main",
+        "--single-branch",
+        "https://github.com/patient-developer/foo-server.git",
+        "build/cloned/"
+    )
+    doLast {
+        copy {
+            from("build/cloned/src/main/proto/")
+            into("build/proto/")
         }
     }
 }

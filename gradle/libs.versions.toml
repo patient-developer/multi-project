@@ -4,7 +4,6 @@ protobuf-protoc = "4.34.1"
 google-protobuf = "0.10.0"
 spring-framework = "4.0.6"
 spring-framework-grpc = "1.0.3"
-spring-dependency-management = "1.1.7"
 
 [libraries]
 grpc-all = { group = "io.grpc", name = "grpc-all", version.ref = "io-grpc" }
@@ -18,4 +17,3 @@ spring-framework-grpc = { group = "org.springframework.grpc", name = "spring-grp
 [plugins]
 google-protobuf = { id = "com.google.protobuf", version.ref = "google-protobuf" }
 spring-framework = { id = "org.springframework.boot", version.ref = "spring-framework" }
-spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
