@@ -25,11 +25,11 @@ dependencies {
     implementation(libs.spring.framework.grpc)
 }
 
-tasks.register<Exec>("fetchProtoFiles") {
+val fetchProtoFiles = tasks.register<Exec>("fetchProtoFiles") {
     description = "Fetching proto files from 'foo-server' to generate gRPC client."
-    val clonedFolder = layout.buildDirectory.dir("cloned"); // (1)
-    onlyIf { !file(clonedFolder).exists() } // apply (1)
-    outputs.dir(layout.buildDirectory.files("proto")) // (2)
+    val targetFolder = layout.buildDirectory.dir("proto");
+    onlyIf { !targetFolder.get().asFile.exists() }
+    outputs.dir(targetFolder)
     commandLine(
         "git",
         "clone",
@@ -37,26 +37,25 @@ tasks.register<Exec>("fetchProtoFiles") {
         "--branch=main",
         "--single-branch",
         "https://github.com/patient-developer/foo-server.git",
-        clonedFolder // apply (1)
+        layout.buildDirectory.dir("cloned").get().asFile.absolutePath
     )
     doLast {
         sync { // (3)
-            from("$clonedFolder/src/main/proto") // apply (1)
-            into(outputs.files) // apply (2)
+            from(layout.buildDirectory.dir("cloned"))
+            into(targetFolder)
         }
     }
 }
 
 sourceSets.main {
     proto {
-        srcDir(layout.buildDirectory.dir("proto"))
+        srcDir(fetchProtoFiles)
     }
 }
 
 tasks {
     generateProto {
         addSourceDirs(files("fetchProtoFiles"))
-//        dependsOn("fetchProtoFiles")
     }
 }
 
