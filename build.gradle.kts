@@ -34,7 +34,7 @@ val fetchProtoFiles = tasks.register<Exec>("fetchProtoFiles") {
         "git",
         "clone",
         "--depth=1",
-        "--branch=main",
+        "--branch=1.0.0",
         "--single-branch",
         "https://github.com/patient-developer/foo-server.git",
         layout.buildDirectory.dir("cloned").get().asFile.absolutePath
@@ -50,12 +50,6 @@ val fetchProtoFiles = tasks.register<Exec>("fetchProtoFiles") {
 sourceSets.main {
     proto {
         srcDir(fetchProtoFiles)
-    }
-}
-
-tasks {
-    generateProto {
-        addSourceDirs(files("fetchProtoFiles"))
     }
 }
 
